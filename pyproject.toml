@@ -1,0 +1,9 @@
+[project]
+name = "mori-sh50"
+version = "0.1.0"
+description = "Industrial pot controller with LabJack T4"
+requires-python = ">=3.8"
+dependencies = [
+    "labjack-ljm>=1.23.0",
+    "pyyaml>=6.0.3",
+]

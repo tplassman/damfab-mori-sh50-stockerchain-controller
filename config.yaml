@@ -1,0 +1,22 @@
+num_pots: 9
+seven_segment_type: common_cathode  # or common_anode
+segment_pins_digit1:
+  a: FIO4
+  b: FIO5
+  c: FIO6
+  d: FIO7
+  e: EIO0
+  f: EIO1
+  g: EIO2
+segment_pins_digit2:
+  a: EIO0
+  b: EIO1
+  c: EIO2
+  d: EIO3
+  e: FIO7
+  f: EIO4
+  g: EIO5
+relay_pins:
+  forward: DAC0
+  reverse: DAC1
+timeout_seconds: 60
