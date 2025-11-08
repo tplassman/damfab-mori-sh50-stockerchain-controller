@@ -6,6 +6,10 @@ class Config:
             self.data = yaml.safe_load(f)
 
     @property
+    def dev_mode(self):
+        return self.data.get("dev_mode", False)
+
+    @property
     def num_pots(self):
         return self.data["num_pots"]
 

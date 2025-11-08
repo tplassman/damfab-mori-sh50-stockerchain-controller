@@ -19,7 +19,7 @@ class Instructions(Frame):
         self.tabs.add(self.active_pot_tab, text="Active Pot")
         self.tabs.select(self.active_pot_tab)
 
-        # --- Active Pot Instructions ---
+        # Active Pot Instructions
         self.active_pot_frame = Frame(self.active_pot_tab, bg="#fff")
         self.active_pot_frame.pack(fill="both", expand=1)
 
@@ -35,7 +35,7 @@ class Instructions(Frame):
         self.active_down_btn = Button(self.active_nav_frame, text="▼", font=("Arial", 18), command=lambda: self.scroll_text(self.active_pot_text, 1))
         self.active_down_btn.pack(side="left", padx=0, pady=5, fill=X, expand=True)
 
-        # --- Target Pot Instructions ---
+        # Target Pot Instructions
         self.target_pot_frame = Frame(self.target_pot_tab, bg="#fff")
         self.target_pot_frame.pack(fill="both", expand=1)
 

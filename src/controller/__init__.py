@@ -37,14 +37,14 @@ class Controller:
                 active_pot = self.read_display()
                 callback(active_pot, direction)
 
+                # Reached target
+                if active_pot == target_pot:
+                    break
+
                 # Overshoot detection
                 if direction == "forward" and (active_pot - target_pot) % num_pots == 0:
                     break
                 if direction == "reverse" and (target_pot - active_pot) % num_pots == 0:
-                    break
-
-                # Stop if reached target pot
-                if active_pot == target_pot:
                     break
 
                 # Timeout check

@@ -5,11 +5,10 @@ from controller.labjack import LabJackController
 from controller.mock import MockController
 from config_loader import Config
 
-DEV_MODE = False
-
 if __name__ == "__main__":
     config = Config("config.yaml")
-    if DEV_MODE:
+
+    if config.dev_mode:
         ljm = MockController(config=config, active_pot=42)
     else:
         ljm = LabJackController(config=config)

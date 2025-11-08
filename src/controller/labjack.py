@@ -29,6 +29,6 @@ class LabJackController:
 
     def _read_segments(self, segment_pins):
         if not self.handle:
-            return [0]*len(segment_pins)
+            return [0]*len(segment_pins) # Return all segments off
         pin_names = list(segment_pins.values())
         return ljm.eReadNames(self.handle, len(pin_names), pin_names)

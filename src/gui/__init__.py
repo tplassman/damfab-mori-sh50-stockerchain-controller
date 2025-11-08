@@ -19,22 +19,24 @@ class GUI:
             active_pot = 0
 
         root.title("Stocker Chain Controller")
-        root.attributes('-fullscreen', True)  # Open in fullscreen
-        # Status bar at the top
+        root.attributes('-fullscreen', True) 
+
+        # Top: Status Bar
         self.status_bar = StatusBar(root, on_close=self.close_app)
         self.status_bar.pack(fill="x")
         self.paned = PanedWindow(root, orient=HORIZONTAL)
         self.paned.pack(fill=BOTH, expand=1)
-        # --- Left: Active Pot ---
+
+        # Left: Active Pot Display
         self.left_frame = Frame(self.paned, bg="#222")
         self.paned.add(self.left_frame, minsize=200)
         Label(self.left_frame, text="Active Pot", font=("Arial", 18, "bold"), fg="#fff", bg="#222").pack(pady=10)
         self.active_pot_display = SevenSegmentDisplay(self.left_frame, digits=1, value=active_pot, scale=1.5)
         self.active_pot_display.pack(pady=20)
-        # --- Active Pot Display ---
         self.stocker_chain = Chain(self.left_frame, self.controller.config.num_pots, active_pot)
         self.stocker_chain.pack(pady=10)
-        # --- Center: Keypad, Target Pot, Run/Stop ---
+
+        # Center: Keypad, Target Pot, Run/Stop
         self.center_frame = Frame(self.paned, bg="#f5f5f5")
         self.paned.add(self.center_frame, minsize=400)
         Label(self.center_frame, text="Target Pot", font=("Arial", 16, "bold"), fg="#222", bg="#f5f5f5").pack(pady=5)
@@ -48,7 +50,8 @@ class GUI:
         self.run_button.grid(row=0, column=0, padx=10)
         self.stop_button = Button(self.button_frame, text="Stop", font=("Arial", 24, "bold"), bg="#e53935", fg="#fff", width=8, height=2, command=self.stop_chain, state="disabled")
         self.stop_button.grid(row=0, column=1, padx=10)
-        # --- Right: Instructions Tabs ---
+
+        # Right: Instructions Tabs
         self.instructions = Instructions(self.paned)
         self.paned.add(self.instructions, minsize=300)
 
@@ -123,8 +126,8 @@ class GUI:
             self.instructions.load_active_pot_instructions(text)
 
     def run_chain(self):
-        self.set_chain_running(True)
         self.controller.run_chain(self.target_pot_value, self.update_active_pot)
+        self.set_chain_running(True)
 
     def stop_chain(self):
         self.controller.stop_chain()
