@@ -55,7 +55,8 @@ class GUI:
         self.instructions = Instructions(self.paned)
         self.paned.add(self.instructions, minsize=300)
 
-        self.update_active_pot(active_pot, "N/A")
+        if active_pot != 0:
+            self.update_active_pot(active_pot, "None")
 
     def num_press(self, key):
         current = str(self.target_pot_value)
@@ -91,11 +92,11 @@ class GUI:
             self.stop_button.config(state="disabled")
 
     def update_active_pot(self, value, direction):
-        self.status_bar.update_status(True, direction.title())
+        self.status_bar.update_status(self.controller.ljm.is_connected(), direction.title())
         self.active_pot_display.set_value(value)
         self.stocker_chain.set_value(value)
         if value == self.target_pot_value:
-            self.status_bar.update_status(True, "N/A")
+            self.status_bar.update_status(self.controller.ljm.is_connected(), "None")
             self.target_pot_value = 0
             self.update_target_pot(self.target_pot_value)
             self.load_instructions(value, target=False)

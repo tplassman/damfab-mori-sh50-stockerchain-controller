@@ -12,6 +12,9 @@ class LabJackController:
             self.handle = None
         self.motion_running = False
 
+    def is_connected(self):
+        return self.handle is not None
+
     def read_display(self):
         segs1 = self._read_segments(self.config.segment_pins_digit1)
         # segs2 = self._read_segments(self.config.segment_pins_digit2)

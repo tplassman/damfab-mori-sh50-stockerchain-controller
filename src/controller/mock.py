@@ -5,6 +5,9 @@ class MockController:
         self.config = config
         self.active_pot = active_pot
 
+    def is_connected(self):
+        return True
+
     def read_display(self):
         return self.active_pot
 
