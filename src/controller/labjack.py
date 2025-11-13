@@ -15,14 +15,17 @@ class LabJackController:
     def is_connected(self):
         return self.handle is not None
 
+    def is_manual_control_active(self):
+        if not self.handle:
+            return False
+
+        return bool(ljm.eReadName(self.handle, self.config.manual_control_pin))
+
     def read_display(self):
-        print(self.config.binary_pins)
         segs1 = self._read_segments(self.config.binary_pins['digit1'])
         segs2 = self._read_segments(self.config.binary_pins['digit2'])
-        print(segs1, segs2)
         digit1 = self.decoder.decodeFourBitBinary(segs1)
         digit2 = self.decoder.decodeFourBitBinary(segs2)
-        print(digit1, digit2)
         if digit1 is not None and digit2 is not None:
             return digit1 * 10 + digit2
         return None

@@ -1,11 +1,12 @@
 import os
 
-from tkinter import Frame, Label, Button, PanedWindow, BOTH, HORIZONTAL
+from tkinter import Frame, Label, Button, PanedWindow, BOTH, HORIZONTAL, Toplevel
 from .seven_segment import SevenSegmentDisplay
 from .keypad import Keypad
 from .instructions import Instructions
 from .status_bar import StatusBar
 from .chain import Chain
+from .overlay import Overlay
 
 class GUI:
     def __init__(self, root, controller):
@@ -57,6 +58,14 @@ class GUI:
 
         if active_pot != 0:
             self.update_active_pot(active_pot, "None")
+
+        self.overlay = Overlay(root)
+
+    def set_enabled(self, enabled):
+        if enabled:
+            self.overlay.hide()
+        else:
+            self.overlay.show()
 
     def num_press(self, key):
         current = str(self.target_pot_value)

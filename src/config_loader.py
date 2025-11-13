@@ -14,6 +14,10 @@ class Config:
         return self.data["num_pots"]
 
     @property
+    def manual_control_pin(self):
+        return self.data["manual_control_pin"]
+
+    @property
     def seven_segment_type(self):
         return self.data["seven_segment_type"]
 

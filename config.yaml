@@ -1,5 +1,6 @@
 dev_mode: false
 num_pots: 60
+manual_control_pin: EIO4
 seven_segment_type: common_cathode  # or common_anode
 segment_pins:
   digit1:

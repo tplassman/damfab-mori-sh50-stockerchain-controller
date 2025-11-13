@@ -8,6 +8,9 @@ class MockController:
     def is_connected(self):
         return True
 
+    def is_manual_control_active(self):
+        return False
+
     def read_display(self):
         return self.active_pot
 

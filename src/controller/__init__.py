@@ -8,6 +8,9 @@ class Controller:
         self.motion_running = False
         self.motion_thread = None
 
+    def is_manual_control_active(self):
+        return self.ljm.is_manual_control_active()
+
     def read_display(self):
         return self.ljm.read_display()
 
