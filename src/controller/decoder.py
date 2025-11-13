@@ -16,7 +16,7 @@ class SevenSegmentDecoder:
     def __init__(self, display_type="common_cathode"):
         self.display_type = display_type
 
-    def decode(self, segments):
+    def decodeDisplay(self, segments):
         # For common anode, invert the signals
         if self.display_type == "common_anode":
             segments = [0 if s else 1 for s in segments]
@@ -24,3 +24,13 @@ class SevenSegmentDecoder:
             if segments == pattern:
                 return digit
         return None
+
+    def decodeFourBitBinary(self, segments):
+        # Assumes segments represent a 4-bit binary number (A, B, C, D)
+        if len(segments) < 4:
+            return None
+        value = 0
+        for i in range(4):
+            if segments[i]:
+                value += (1 << (3 - i))
+        return value

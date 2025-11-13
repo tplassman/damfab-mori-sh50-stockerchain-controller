@@ -18,12 +18,12 @@ class Config:
         return self.data["seven_segment_type"]
 
     @property
-    def segment_pins_digit1(self):
-        return self.data["segment_pins_digit1"]
+    def segment_pins(self):
+        return self.data["segment_pins"]
 
     @property
-    def segment_pins_digit2(self):
-        return self.data["segment_pins_digit2"]
+    def binary_pins(self):
+        return self.data["binary_pins"]
 
     @property
     def relay_pins(self):

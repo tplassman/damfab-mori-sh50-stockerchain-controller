@@ -16,14 +16,16 @@ class LabJackController:
         return self.handle is not None
 
     def read_display(self):
-        segs1 = self._read_segments(self.config.segment_pins_digit1)
-        # segs2 = self._read_segments(self.config.segment_pins_digit2)
-        digit1 = self.decoder.decode(segs1)
-        return digit1
-        # digit2 = self.decoder.decode(segs2)
-        # if digit1 is not None and digit2 is not None:
-        #     return digit1 * 10 + digit2
-        # return None
+        print(self.config.binary_pins)
+        segs1 = self._read_segments(self.config.binary_pins['digit1'])
+        segs2 = self._read_segments(self.config.binary_pins['digit2'])
+        print(segs1, segs2)
+        digit1 = self.decoder.decodeFourBitBinary(segs1)
+        digit2 = self.decoder.decodeFourBitBinary(segs2)
+        print(digit1, digit2)
+        if digit1 is not None and digit2 is not None:
+            return digit1 * 10 + digit2
+        return None
 
     def set_relay(self, forward=False, reverse=False):
         if self.handle:
