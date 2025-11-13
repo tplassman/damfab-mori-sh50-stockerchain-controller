@@ -1,4 +1,4 @@
-from tkinter import Toplevel, Frame, Label
+from tkinter import Frame, Label
 
 class Overlay:
     def __init__(self, root, message="Manual Mode Inactive"):
@@ -9,28 +9,22 @@ class Overlay:
     def show(self):
         if self.overlay is not None:
             return
-        self.overlay = Toplevel(self.root)
-        self.overlay.overrideredirect(True)
-        self.overlay.attributes('-alpha', 0.5)  # 50% opacity
-        self.overlay.configure(bg="#888")
-        self.overlay.geometry(f"{self.root.winfo_width()}x{self.root.winfo_height()}+{self.root.winfo_x()}+{self.root.winfo_y()}")
-
-        # Add a frame for the label with solid background and padding
-        msg_frame = Frame(self.overlay, bg="#222")
-        msg_frame.pack(expand=True, padx=40, pady=40)
+        self.overlay = Frame(self.root, bg="#888")
+        self.overlay.place(relx=0, rely=0, relwidth=1, relheight=1)
+        self.overlay.lift()
         label = Label(
-            msg_frame,
+            self.overlay,
             text=self.message,
             font=("Arial", 32, "bold"),
-            bg="#222",
+            bg="#888",
             fg="#fff",
             padx=40,
             pady=30
         )
-        label.pack(expand=True)
-
-        self.overlay.lift()
-        self.overlay.grab_set()  # Block events to main window
+        label.place(relx=0.5, rely=0.5, anchor="center")
+        # Block all events
+        self.overlay.bind("<Button>", lambda e: "break")
+        self.overlay.bind("<Key>", lambda e: "break")
 
     def hide(self):
         if self.overlay is not None:

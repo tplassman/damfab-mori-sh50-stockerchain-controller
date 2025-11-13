@@ -11,7 +11,6 @@ def check_manual_control(gui, controller, poll_interval=500):
     except Exception:
         enabled = False
 
-    print(f"Manual control active: {enabled}")
     gui.set_enabled(enabled)
     gui.root.after(poll_interval, check_manual_control, gui, controller, poll_interval)
 

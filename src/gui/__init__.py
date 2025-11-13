@@ -59,6 +59,7 @@ class GUI:
         if active_pot != 0:
             self.update_active_pot(active_pot, "None")
 
+        # Overlay for manual mode inactive
         self.overlay = Overlay(root)
 
     def set_enabled(self, enabled):
@@ -66,6 +67,9 @@ class GUI:
             self.overlay.hide()
         else:
             self.overlay.show()
+            self.status_bar.lift()
+
+        self.update_active_pot(self.controller.read_display(), "None")
 
     def num_press(self, key):
         current = str(self.target_pot_value)
