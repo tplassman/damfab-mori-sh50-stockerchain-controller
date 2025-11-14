@@ -23,12 +23,12 @@ src/
   main.py                # Application entry point
   config_loader.py       # Loads YAML config
   controller/
-    __init__.py          # Main controller logic
+    main.py              # Main controller logic
     labjack.py           # LabJack hardware interface
     mock.py              # Mock controller for dev/testing
     decoder.py           # Seven-segment display decoder
   gui/
-    __init__.py          # Main GUI class
+    main.py              # Main GUI class
     chain.py             # Chain visualization widget
     instructions.py      # Instructions pane widget
     keypad.py            # Numeric keypad widget

@@ -10,6 +10,10 @@ class Config:
         return self.data.get("dev_mode", False)
 
     @property
+    def stop_early(self):
+        return self.data.get("stop_early", False)
+
+    @property
     def num_pots(self):
         return self.data["num_pots"]
 
