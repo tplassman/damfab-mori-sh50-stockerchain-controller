@@ -1,8 +1,8 @@
-dev_mode: false
+dev_mode: true
 num_pots: 60
 manual_control_pin: EIO4
 seven_segment_type: common_cathode  # or common_anode
-segment_pins:
+segment_pins: # Seven segment pin mapping
   digit1:
     a: FIO4
     b: FIO5
@@ -19,7 +19,7 @@ segment_pins:
     e: FIO7
     f: EIO4
     g: EIO5
-binary_pins:
+binary_pins: # Binary representation pin mapping
   digit1:
     bit0: FIO4
     bit1: FIO5

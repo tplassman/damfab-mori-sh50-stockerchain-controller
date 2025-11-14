@@ -14,7 +14,7 @@ class Controller:
     def read_display(self):
         return self.ljm.read_display()
 
-    def run_chain(self, target_pot, callback):
+    def run_chain(self, target_pot, loop_callback, reached_callback):
         if self.motion_running:
             return  # Prevent multiple motions
         self.motion_running = True
@@ -38,28 +38,37 @@ class Controller:
                 reverse = int(direction == "reverse")
                 self.ljm.set_relay(forward=forward, reverse=reverse)
                 active_pot = self.read_display()
-                callback(active_pot, direction)
+                loop_callback(active_pot, direction)
 
-                # Reached target
-                if active_pot == target_pot:
+                # Want to stop chain one pot before the target to avoid overshoot issues
+                if (
+                    (direction == "forward" and (active_pot + 1) % num_pots == target_pot) #One pot before
+                    or (direction == "reverse" and (active_pot - 1) % num_pots == target_pot) #One pot before
+                    or (active_pot == target_pot) #Direct hit check
+                    or (timeout and (time.time() - start_time) > timeout) #Timeout check
+                ):
+                    reached_callback(active_pot)
+
                     break
 
-                # Overshoot detection
-                if direction == "forward" and (active_pot - target_pot) % num_pots == 0:
-                    break
-                if direction == "reverse" and (target_pot - active_pot) % num_pots == 0:
-                    break
-
-                # Timeout check
-                if timeout and (time.time() - start_time) > timeout:
-                    break
-
-                time.sleep(0.5)
+                time.sleep(0.05)
 
             self.stop_chain()
 
         self.motion_thread = threading.Thread(target=motion_loop, daemon=True)
         self.motion_thread.start()
+
+    def reverse_chain(self):
+        if self.motion_running:
+            return
+        self.motion_running = True
+        self.ljm.set_relay(forward=0, reverse=1)
+
+    def forward_chain(self):
+        if self.motion_running:
+            return
+        self.motion_running = True
+        self.ljm.set_relay(forward=1, reverse=0)
 
     def stop_chain(self):
         self.motion_running = False

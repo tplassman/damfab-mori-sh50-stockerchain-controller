@@ -9,7 +9,7 @@ class MockController:
         return True
 
     def is_manual_control_active(self):
-        return False
+        return True
 
     def read_display(self):
         return self.active_pot

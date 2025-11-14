@@ -37,7 +37,7 @@ class GUI:
         self.stocker_chain = Chain(self.left_frame, self.controller.config.num_pots, active_pot)
         self.stocker_chain.pack(pady=10)
 
-        # Center: Keypad, Target Pot, Run/Stop
+        # Center: Keypad, Target Pot, Run/Stop, Reverse/Forward
         self.center_frame = Frame(self.paned, bg="#f5f5f5")
         self.paned.add(self.center_frame, minsize=400)
         Label(self.center_frame, text="Target Pot", font=("Arial", 16, "bold"), fg="#222", bg="#f5f5f5").pack(pady=5)
@@ -45,22 +45,43 @@ class GUI:
         self.target_pot_display.pack(pady=5)
         self.keypad = Keypad(self.center_frame, on_num_press=self.num_press, on_clear_press=self.clear_press, on_del_press=self.del_press, bg="#f5f5f5")
         self.keypad.pack(pady=10)
-        self.button_frame = Frame(self.center_frame, bg="#f5f5f5")
+        # Button frame (2x2 grid for Run, Stop, Forward, Reverse)
+        self.button_frame = Frame(self.center_frame, bg="#fff")
         self.button_frame.pack(pady=10)
-        self.run_button = Button(self.button_frame, text="Run", font=("Arial", 24, "bold"), bg="#43a047", fg="#fff", width=8, height=2, command=self.run_chain, state="disabled")
-        self.run_button.grid(row=0, column=0, padx=10)
-        self.stop_button = Button(self.button_frame, text="Stop", font=("Arial", 24, "bold"), bg="#e53935", fg="#fff", width=8, height=2, command=self.stop_chain, state="disabled")
-        self.stop_button.grid(row=0, column=1, padx=10)
+        # Common button style
+        button_kwargs = {
+            "font": ("Arial", 20, "bold"),
+            "width": 8,
+            "height": 2,
+            "fg": "#fff",
+            "activeforeground": "#fff"
+        }
+        # Row 0
+        self.run_button = Button(self.button_frame, text="Run", command=self.run_chain, state="normal", bg="#43a047", activebackground="#388e3c", **button_kwargs)
+        self.run_button.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+        self.stop_button = Button(self.button_frame, text="Stop", command=self.stop_chain, state="disabled", bg="#e53935", activebackground="#b71c1c", **button_kwargs)
+        self.stop_button.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
+        self.reverse_button = Button(self.button_frame, text="Reverse", command=self.reverse_chain, state="disabled", bg="#757575", activebackground="#424242", **button_kwargs)
+        self.reverse_button.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
+        self.forward_button = Button(self.button_frame, text="Forward", command=self.forward_chain, state="disabled", bg="#757575", activebackground="#424242", **button_kwargs)
+        self.forward_button.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
+
+        # Make all grid cells expand evenly
+        for i in range(2):
+            self.button_frame.grid_rowconfigure(i, weight=1)
+            self.button_frame.grid_columnconfigure(i, weight=1)
 
         # Right: Instructions Tabs
         self.instructions = Instructions(self.paned)
         self.paned.add(self.instructions, minsize=300)
 
+        # Overlay for manual mode inactive
+        self.overlay = Overlay(root)
+
         if active_pot != 0:
             self.update_active_pot(active_pot, "None")
 
-        # Overlay for manual mode inactive
-        self.overlay = Overlay(root)
+        self.set_chain_running(False)
 
     def set_enabled(self, enabled):
         if enabled:
@@ -100,21 +121,26 @@ class GUI:
         if running:
             self.run_button.config(state="disabled")
             self.stop_button.config(state="normal")
+            self.forward_button.config(state="disabled")
+            self.reverse_button.config(state="disabled")
         else:
             self.run_button.config(state="normal")
             self.stop_button.config(state="disabled")
+            self.forward_button.config(state="normal")
+            self.reverse_button.config(state="normal")
 
     def update_active_pot(self, value, direction):
         self.status_bar.update_status(self.controller.ljm.is_connected(), direction.title())
         self.active_pot_display.set_value(value)
         self.stocker_chain.set_value(value)
-        if value == self.target_pot_value:
-            self.status_bar.update_status(self.controller.ljm.is_connected(), "None")
-            self.target_pot_value = 0
-            self.update_target_pot(self.target_pot_value)
-            self.load_instructions(value, target=False)
-            self.instructions.tabs.select(self.instructions.active_pot_tab)
-            self.set_chain_running(False)
+
+    def target_pot_reached(self, value):
+        self.status_bar.update_status(self.controller.ljm.is_connected(), "None")
+        self.target_pot_value = 0
+        self.update_target_pot(self.target_pot_value)
+        self.load_instructions(value, target=False)
+        self.instructions.tabs.select(self.instructions.active_pot_tab)
+        self.set_chain_running(False)
 
     def update_target_pot(self, value):
         self.target_pot_display.set_value(value)
@@ -140,12 +166,20 @@ class GUI:
             self.instructions.load_active_pot_instructions(text)
 
     def run_chain(self):
-        self.controller.run_chain(self.target_pot_value, self.update_active_pot)
+        self.controller.run_chain(self.target_pot_value, self.update_active_pot, self.target_pot_reached)
         self.set_chain_running(True)
 
     def stop_chain(self):
         self.controller.stop_chain()
         self.set_chain_running(False)
+
+    def reverse_chain(self):
+        self.controller.reverse_chain()
+        self.set_chain_running(True)
+
+    def forward_chain(self):
+        self.controller.forward_chain()
+        self.set_chain_running(True)
 
     def close_app(self):
         self.root.destroy()
