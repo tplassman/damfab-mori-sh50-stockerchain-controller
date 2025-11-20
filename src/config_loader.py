@@ -22,6 +22,10 @@ class Config:
         return self.data["manual_control_pin"]
 
     @property
+    def manual_delay_seconds(self):
+        return self.data.get("manual_delay_seconds", 5)
+
+    @property
     def seven_segment_type(self):
         return self.data["seven_segment_type"]
 

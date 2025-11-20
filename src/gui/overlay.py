@@ -6,6 +6,9 @@ class Overlay:
         self.overlay = None
         self.message = message
 
+    def is_visible(self):
+        return self.overlay is not None
+
     def show(self):
         if self.overlay is not None:
             return
