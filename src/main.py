@@ -24,8 +24,10 @@ if __name__ == "__main__":
     config = Config("config.yaml")
 
     if config.dev_mode:
+        print("Starting in development mode with mock controller.")
         ljm = MockController(config=config, active_pot=42)
     else:
+        print("Starting in production mode with LabJack controller.")
         ljm = LabJackController(config=config)
 
     controller = Controller(config=config, ljm=ljm)

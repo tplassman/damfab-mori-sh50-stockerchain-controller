@@ -17,6 +17,7 @@ class LabJackController:
 
     def is_manual_control_active(self):
         if not self.handle:
+            print("LabJack not connected; cannot read manual control status.")
             return False
 
         return bool(ljm.eReadName(self.handle, self.config.manual_control_pin))

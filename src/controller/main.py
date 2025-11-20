@@ -101,5 +101,6 @@ class Controller:
         self.motion_thread.start()
 
     def stop_chain(self):
+        print("Stopping chain motion...")
         self.motion_running = False
         self.ljm.set_relay(forward=0, reverse=0)
