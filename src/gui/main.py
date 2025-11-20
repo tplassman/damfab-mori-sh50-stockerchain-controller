@@ -78,12 +78,16 @@ class GUI:
         self.set_chain_running(False)
         self.clear_target()
         if active_pot != 0:
-            self.set_active_pot(active_pot, "None")
+            self.set_active_pot(active_pot)
 
     def set_enabled(self, enabled):
         if enabled:
+            if not self.controller.motion_running:
+                active_pot = self.controller.read_display()
+                self.set_active_pot(active_pot)
             self.overlay.hide()
         else:
+            self.stop_chain()
             self.overlay.show()
             self.status_bar.lift()
 
@@ -121,7 +125,7 @@ class GUI:
             self.forward_button.config(state="normal")
             self.reverse_button.config(state="normal")
 
-    def set_active_pot(self, value, direction):
+    def set_active_pot(self, value, direction = "None"):
         self.status_bar.update_status(self.controller.ljm.is_connected(), direction.title())
         self.active_pot_display.set_value(value)
         self.stocker_chain.set_value(value)
@@ -169,12 +173,12 @@ class GUI:
 
     def reverse_chain(self):
         self.status_bar.update_status(self.controller.ljm.is_connected(), "Reverse")
-        self.controller.reverse_chain()
+        self.controller.reverse_chain(self.set_active_pot)
         self.set_chain_running(True)
 
     def forward_chain(self):
         self.status_bar.update_status(self.controller.ljm.is_connected(), "Forward")
-        self.controller.forward_chain()
+        self.controller.forward_chain(self.set_active_pot)
         self.set_chain_running(True)
 
     def close_app(self):

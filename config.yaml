@@ -1,5 +1,5 @@
 dev_mode: false
-stop_early: false
+stop_early: true
 num_pots: 60
 manual_control_pin: EIO4
 manual_delay_seconds: 5 # Time to wait before enabling manual control after signal
