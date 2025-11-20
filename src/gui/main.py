@@ -45,7 +45,7 @@ class GUI:
         self.target_pot_display.pack(pady=5)
         self.keypad = Keypad(self.center_frame, on_num_press=self.num_press, on_clear_press=self.clear_target, on_del_press=self.del_press, bg="#f5f5f5")
         self.keypad.pack(pady=10)
-        self.button_frame = Frame(self.center_frame, bg="#fff")
+        self.button_frame = Frame(self.center_frame)
         self.button_frame.pack(pady=10)
         button_kwargs = {
             "font": ("Arial", 20, "bold"),
@@ -115,11 +115,13 @@ class GUI:
 
     def set_chain_running(self, running):
         if running:
+            self.keypad.disabled()
             self.run_button.config(state="disabled")
             self.stop_button.config(state="normal")
             self.forward_button.config(state="disabled")
             self.reverse_button.config(state="disabled")
         else:
+            self.keypad.enabled()
             self.run_button.config(state="disabled")
             self.stop_button.config(state="disabled")
             self.forward_button.config(state="normal")

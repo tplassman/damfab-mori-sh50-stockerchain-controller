@@ -24,3 +24,11 @@ class Keypad(Frame):
                 cmd = lambda t=text: self.on_num_press(t)
             btn = Button(self, text=text, font=("Arial", 18), width=4, height=1, command=cmd)
             btn.grid(row=row, column=col, padx=3, pady=3)
+
+    def disabled(self):
+        for child in self.winfo_children():
+            child.config(state="disabled")
+
+    def enabled(self):
+        for child in self.winfo_children():
+            child.config(state="normal")
